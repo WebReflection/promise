@@ -26,6 +26,7 @@ export class AbortController extends BuiltinAbortController {
 };
 
 export class Promise extends BuiltinPromise {
+  static [Symbol.species] = BuiltinPromise;
   constructor(callback, {signal} = {}) {
     super((resolve, reject) => {
       if (signal)
