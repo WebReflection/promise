@@ -1,5 +1,9 @@
 # @webreflection/promise
 
+[![Coverage Status](https://coveralls.io/repos/github/WebReflection/promise/badge.svg?branch=main)](https://coveralls.io/github/WebReflection/promise?branch=main) [![build status](https://github.com/WebReflection/promise/actions/workflows/node.js.yml/badge.svg)](https://github.com/WebReflection/promise/actions)
+
+<sup>**Social Media Photo by [Andrew Petrov](https://unsplash.com/@andrewwwpetrov) on [Unsplash](https://unsplash.com/)**</sup>
+
 Abortable and Resolvable Promises.
 
 This module exposes a *dropin* replacement for both *Promise* and *AbortController* with the following extra features:
