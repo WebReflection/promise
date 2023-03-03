@@ -27,6 +27,9 @@ class AbortController extends $AbortController {
 }
 exports.AbortController = AbortController;
 
+// why is this a function and not a class?
+// well, arm yourself with patience and read this while thread:
+// https://es.discourse.group/t/one-does-not-simply-extend-promise/1627
 function Promise(callback, {signal} = {}) {
   return new $Promise((resolve, reject) => {
     if (signal)
