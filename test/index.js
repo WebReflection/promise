@@ -27,6 +27,10 @@ setTimeout(
           new Promise(Object) instanceof Promise,
           'new Promise instanceof Promise'
         );
+        console.assert(
+          new Promise(Object).then(Object) instanceof Promise,
+          'new Promise#then() instanceof Promise'
+        );
         const controller = new AbortController;
         new Promise(
           (resolve, reject) => {
