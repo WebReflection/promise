@@ -1,6 +1,6 @@
 {
   "name": "@webreflection/promise",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Abortable and Resolvable Promises",
   "main": "./cjs/index.js",
   "scripts": {
