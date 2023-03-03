@@ -22,7 +22,7 @@ const promise = new Promise(
   (resolve, reject) => {
     setTimeout(resolve, 1000, 'automatically');
   },
-  constroller
+  controller
 );
 
 // resolve the promise ahead of time
