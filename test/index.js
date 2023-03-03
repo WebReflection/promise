@@ -42,7 +42,10 @@ setTimeout(
             controller
           ).catch(error => {
             console.assert(error.message === 'nope', 'rejected promise');
-            console.log('\x1b[1mOK\x1b[0m');
+            Promise.resolve('yup').then(result => {
+              console.assert(result === 'yup', 'Promise.resolve');
+              console.log('\x1b[1mOK\x1b[0m');
+            });
           });
         });
       });

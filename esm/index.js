@@ -1,8 +1,8 @@
 /*! (c) Andrea Giammarchi - ISC */
 
 const {
-  AbortController: BuiltinAbortController,
-  Promise: BuiltinPromise
+  AbortController: $AbortController,
+  Promise: $Promise
 } = globalThis;
 
 class Handler {
@@ -19,19 +19,21 @@ class Handler {
   }
 }
 
-export class AbortController extends BuiltinAbortController {
+export class AbortController extends $AbortController {
   resolve(value) {
     super.abort(new Handler(value, value));
   }
 };
 
-export class Promise extends BuiltinPromise {
-  static [Symbol.species] = BuiltinPromise;
-  constructor(callback, {signal} = {}) {
-    super((resolve, reject) => {
-      if (signal)
-        signal.addEventListener('abort', new Handler(resolve, reject));
-      callback(resolve, reject);
-    });
-  }
-};
+function Promise(callback, {signal} = {}) {
+  return new $Promise((resolve, reject) => {
+    if (signal)
+      signal.addEventListener('abort', new Handler(resolve, reject));
+    callback(resolve, reject);
+  });
+}
+
+Object.setPrototypeOf(Promise, $Promise).prototype =
+  $Promise.prototype;
+
+export {Promise};
