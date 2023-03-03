@@ -1,0 +1,40 @@
+{
+  "name": "@webreflection/promise",
+  "version": "0.0.0",
+  "description": "Abortable and Resolvable Promises",
+  "main": "./cjs/index.js",
+  "scripts": {
+    "build": "npm run cjs && npm run test",
+    "cjs": "ascjs esm cjs",
+    "test": "c8 node test/index.js",
+    "coverage": "mkdir -p ./coverage; c8 report --reporter=text-lcov > ./coverage/lcov.info"
+  },
+  "keywords": [
+    "Promise",
+    "AbortController",
+    "resolve"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "ascjs": "^5.0.1",
+    "c8": "^7.13.0"
+  },
+  "module": "./esm/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "default": "./cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebReflection/promise.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WebReflection/promise/issues"
+  },
+  "homepage": "https://github.com/WebReflection/promise#readme"
+}

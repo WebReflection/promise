@@ -1,0 +1,31 @@
+# @webreflection/promise
+
+Abortable and Resolvable Promises.
+
+This module exposes a *dropin* replacement for both *Promise* and *AbortController* with the following extra features:
+
+  * the **Promise** accepts an optional argument that could be a *controller* or an object carrying an *AbortSignal* with it.
+  * the **AbortController** exposes a `resolve(value)` method so that not only it's possible to *abort* a *Promise*, it's also possible to *resolve* it, still using the security and ownership guards that [AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) offers.
+
+As a matter of fact, the *Promise* literally extends the builtin *Promise* and simply adds a listener to the optional signal, while the *AbortController* extends the builtin class too, exposing the extra `resolve(value)` method.
+
+```js
+// const {AbortController, Promise} = require('@webreflection/promise');
+import {AbortController, Promise} from '@webreflection/promise';
+
+const controller = new AbortController;
+const promise = new Promise(
+  (resolve, reject) => {
+    setTimeout(resolve, 1000, 'automatically');
+  },
+  constroller
+);
+
+// resolve the promise ahead of time
+controller.resolve('manually');
+
+// or abort the promise with a reason
+constroller.abort('but why?!');
+```
+
+Every operation is fully based on default [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) standard behavior: no hacks, no tricks, just a convenient utility suitable for all occasions.
