@@ -1,11 +1,6 @@
 'use strict';
 /*! (c) Andrea Giammarchi - ISC */
 
-const {
-  AbortController: $AbortController,
-  Promise: $Promise
-} = globalThis;
-
 class Handler {
   constructor($, _) {
     this.$ = $;
@@ -20,6 +15,11 @@ class Handler {
   }
 }
 
+const {
+  AbortController: $AbortController,
+  Promise: $Promise
+} = globalThis;
+
 class AbortController extends $AbortController {
   resolve(value) {
     super.abort(new Handler(value, value));
@@ -27,18 +27,34 @@ class AbortController extends $AbortController {
 }
 exports.AbortController = AbortController;
 
+const clean = (signal, handler, callback) => value => {
+  signal.removeEventListener('abort', handler);
+  callback(value);
+};
+
+const create = (callback, signal) => (resolve, reject) => {
+  const handler = new Handler(resolve, reject);
+  signal.addEventListener('abort', handler, {once: true});
+  callback(
+    clean(signal, handler, resolve),
+    clean(signal, handler, reject)
+  );
+};
+
+const {construct, setPrototypeOf} = Reflect;
+
 // why is this a function and not a class?
 // well, arm yourself with patience and read this whole thread:
 // https://es.discourse.group/t/one-does-not-simply-extend-promise/1627
 function Promise(callback, {signal} = {}) {
-  return new $Promise((resolve, reject) => {
-    if (signal)
-      signal.addEventListener('abort', new Handler(resolve, reject));
-    callback(resolve, reject);
-  });
+  return construct(
+    $Promise,
+    [signal ? create(callback, signal) : callback],
+    new.target
+  );
 }
 
-Object.setPrototypeOf(Promise, $Promise).prototype =
-  $Promise.prototype;
+setPrototypeOf(Promise, $Promise);
+Promise.prototype = $Promise.prototype;
 
 exports.Promise = Promise;
