@@ -20,11 +20,11 @@ import {AbortController, Promise} from '@webreflection/promise';
 const controller = new AbortController;
 const promise = new Promise(
   // optionally receive a signal as third argument
-  // if passed via controller
+  // if passed via controller or object
   (resolve, reject, signal) => {
     const t = setTimeout(resolve, 1000, 'automatically');
-    // optional return a callback to cleanup if manually
-    // resolved or aborted
+    // optional return a callback to cleanup whenever
+    // the promise is either resolved or aborted
     return () => { clearTimeout(t) }
   },
   controller
