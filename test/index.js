@@ -14,14 +14,17 @@ setTimeout(
     controller.resolve(value);
     promise.then(result => {
       console.assert(result === value, 'controller.resolve(value)');
+      let invoked = false;
       const controller = new AbortController;
       const promise = new Promise(
         (resolve, reject) => {
-          setTimeout(resolve, 100, 'automatically');
+          const t = setTimeout(resolve, 100, 'automatically');
+          return () => { clearTimeout(t); invoked = true; };
         },
         controller
       );
       promise.catch(({currentTarget: {reason}}) => {
+        console.assert(invoked === 'invoked');
         console.assert(reason === 'nope');
         console.assert(
           new Promise(Object) instanceof Promise,
