@@ -1,17 +1,15 @@
 'use strict';
 /*! (c) Andrea Giammarchi - ISC */
 
-const effects = new WeakMap;
-
 class Handler {
   constructor($, _) {
     this.$ = $;
     this._ = _;
     this.c = void 0;
   }
-  handleEvent(event) {
+  async handleEvent(event) {
     const {reason} = event.currentTarget;
-    effect(this);
+    await effect(this);
     if (reason instanceof Handler)
       this.$(reason.$);
     else
@@ -31,24 +29,24 @@ class AbortController extends $AbortController {
 }
 exports.AbortController = AbortController;
 
-const effect = handler => {
+const effect = async handler => {
   const {c} = handler;
   if (c) {
     handler.c = void 0;
-    c();
+    await c();
   }
 };
 
-const clean = (signal, handler, callback) => value => {
+const clean = (signal, handler, callback) => async value => {
   signal.removeEventListener('abort', handler);
-  effect(handler);
+  await effect(handler);
   callback(value);
 };
 
-const create = (callback, signal) => (resolve, reject) => {
+const create = (callback, signal) => async (resolve, reject) => {
   const handler = new Handler(resolve, reject);
   signal.addEventListener('abort', handler, {once: true});
-  const fx = callback(
+  const fx = await callback(
     clean(signal, handler, resolve),
     clean(signal, handler, reject),
     signal
