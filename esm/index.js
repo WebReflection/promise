@@ -28,10 +28,11 @@ export class AbortController extends $AbortController {
 };
 
 const effect = async handler => {
-  const {c} = handler;
+  let {c} = handler;
   if (c) {
     handler.c = void 0;
-    await c();
+    if (typeof (c = await c) === 'function')
+      await c();
   }
 };
 
@@ -41,16 +42,14 @@ const clean = (signal, handler, callback) => async value => {
   callback(value);
 };
 
-const create = (callback, signal) => async (resolve, reject) => {
+const create = (callback, signal) => (resolve, reject) => {
   const handler = new Handler(resolve, reject);
   signal.addEventListener('abort', handler, {once: true});
-  const fx = await callback(
+  handler.c = callback(
     clean(signal, handler, resolve),
     clean(signal, handler, reject),
     signal
   );
-  if (typeof fx === 'function')
-    handler.c = fx;
 };
 
 const {construct, setPrototypeOf} = Reflect;

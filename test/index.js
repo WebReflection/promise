@@ -24,8 +24,8 @@ setTimeout(
         controller
       );
       promise.catch(({currentTarget: {reason}}) => {
-        console.assert(invoked === 'invoked');
-        console.assert(reason === 'nope');
+        console.assert(invoked, 'invoked');
+        console.assert(reason === 'nope', 'controller.abort(value)');
         console.assert(
           new Promise(Object) instanceof Promise,
           'new Promise instanceof Promise'
@@ -56,7 +56,7 @@ setTimeout(
           });
         });
       });
-      controller.abort('nope', 'controller.abort(value)');
+      controller.abort('nope');
     });
   },
   50
